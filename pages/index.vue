@@ -1,12 +1,13 @@
 <script setup lang="ts">
+
+import {useFetchCities} from "~/store/fetchData";
+
 interface FoundCityInterface {
   place_id: string;
   lat: string;
   lon: string;
   display_name: string;
 }
-
-let inputCityQueryTimeout: ReturnType<typeof setTimeout>
 
 const cityQuery = ref('');
 const foundCities = ref<FoundCityInterface[]>([]);
@@ -22,40 +23,49 @@ const getForecast = async (lat: string, lon: string) => {
   console.log(data)
 }
 
-const findCityCoordinates = async () => {
+const findCityCoordinates = async () : Promise<void> => {
   try {
-    const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${cityQuery.value}&format=json`);
+    if (!cityQuery.value) {
+      return
+    }
 
-    foundCities.value = await response.json();
-  }catch (e: any) {
-    console.error(e.message)
-  }finally {
+    isLoading.value = true
+
+    const response = await useFetchCities().defineCityCoordinatesByName(cityQuery.value)
+
+    if (!response.length) {
+      foundCities.value.push('По вашему запросу ничего не найдено')
+    }
+
+    foundCities.value = response
+  } catch (e: any) {
+    console.error(e)
+  } finally {
     isLoading.value = false
   }
 }
-
-const handleInput = () => {
-  console.log(cityQuery.value)
-  clearTimeout(inputCityQueryTimeout);
-  isLoading.value = true
-
-  inputCityQueryTimeout = setTimeout(() => {
-    findCityCoordinates()
-  }, 1000);
-};
 </script>
 
 <template>
-<div>
-  <div class="search-bar">
-    <search-component v-model.trim="cityQuery" @input="handleInput"/>
-    <list-component :data="foundCities"/>
+  <div>
+    <div>
+      <div class="search-bar">
+        <search-component :aria-disabled="isLoading" v-model.trim="cityQuery"/>
+        <v-btn size="x-large" :disabled="isLoading" @click="findCityCoordinates">
+          <Icon name="solar:magnifer-linear"/>
+        </v-btn>
+      </div>
+      <app-loader v-if="isLoading"/>
+      <list-component v-else :data="foundCities"/>
+    </div>
   </div>
-</div>
 </template>
 
-<style scoped>
-.search-bar{
-  width: inherit;
+<style scoped lang="scss">
+@import "assets/css/main";
+
+.search-bar {
+  @include flexbox(row, center,center);
+  gap: 15px;
 }
 </style>

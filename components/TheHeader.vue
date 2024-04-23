@@ -1,4 +1,5 @@
 <script setup >
+import {useCityStore} from "~/store/cities.js";
 
 </script>
 
@@ -6,6 +7,7 @@
 <header>
   <Icon name="wi:rain" size="48px" />
   <h2>weather app</h2>
+
 </header>
 </template>
 

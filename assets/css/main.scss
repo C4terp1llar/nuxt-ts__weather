@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: main;
+  src: url("../fonts/Inconsolata-VariableFont_wdth,wght.ttf");
+}
+
 @mixin respond-to($breakpoint) {
   @if $breakpoint == small {
     @media (max-width: 576px) { @content; }
@@ -31,7 +36,8 @@ html,body{
 }
 
 body{
-  padding: 15px;
+  padding: 25px;
+  font-family: main, serif;
   #__nuxt{
     height: inherit;
     width: inherit;
