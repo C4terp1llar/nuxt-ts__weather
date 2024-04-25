@@ -9,6 +9,16 @@ export const useFetchCities = defineStore('fetchCities', {
             } catch (e) {
                 throw e;
             }
+        },
+        async getWeatherForecast({lat, lon}){
+            try {
+                const response = await fetch(
+                    `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=71273a257e5b7f92a30395ebf0ddcffb`
+                )
+                return await response.json();
+            }catch (e) {
+                console.error(e.message)
+            }
         }
     }
 });

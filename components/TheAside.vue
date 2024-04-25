@@ -6,10 +6,16 @@
 <aside class="aside">
   <ul>
     <li>
-      <nuxt-link to="/">home</nuxt-link>
+      <nuxt-link
+          :to="{name: 'index'}"
+          :class="{ 'active-link': $route.name === 'index', 'link': true }"
+      >home</nuxt-link>
     </li>
     <li>
-      <nuxt-link to="about">about</nuxt-link>
+      <nuxt-link
+          :to="{name: 'forecast'}"
+          :class="{ 'active-link': $route.name === 'forecast', 'link': true }"
+      >Прогноз</nuxt-link>
     </li>
   </ul>
 </aside>

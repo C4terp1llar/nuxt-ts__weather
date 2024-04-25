@@ -44,3 +44,14 @@ body{
   }
 }
 
+.link {
+  color: #007bff;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.active-link {
+  color: #dc3545;
+  text-decoration: underline;
+}
